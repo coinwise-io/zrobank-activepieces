@@ -107,9 +107,8 @@ COPY docker-entrypoint.sh .
 RUN mkdir -p \
     /usr/src/app/dist/packages/server \
     /usr/src/app/dist/packages/engine \
-    /usr/src/app/dist/packages/pieces/custom \
     /usr/src/app/dist/packages/shared && \
-    chmod +x docker-entrypoint.sh 
+    chmod +x docker-entrypoint.sh
 
 # Copy built artifacts from build stage
 COPY --from=build /usr/src/app/LICENSE .
@@ -117,33 +116,6 @@ COPY --from=build /usr/src/app/dist/packages/engine/ ./dist/packages/engine/
 COPY --from=build /usr/src/app/dist/packages/server/ ./dist/packages/server/
 COPY --from=build /usr/src/app/dist/packages/shared/ ./dist/packages/shared/
 COPY --from=build /usr/src/app/packages ./packages
-COPY --from=build /usr/src/app/dist/packages/pieces/custom/ ./dist/packages/pieces/custom/
-
-# Install dependencies for custom pieces (needed for runtime loading)
-RUN for piece_dir in /usr/src/app/packages/pieces/custom/*/; do \
-      if [ -f "$piece_dir/package.json" ]; then \
-        echo "Installing dependencies for $(basename $piece_dir)..." && \
-        cd "$piece_dir" && \
-        bun install --no-save --silent || npm install --no-save --silent || true; \
-      fi; \
-    done
-
-# Create script to register custom pieces in database
-RUN echo '#!/bin/bash\n\
-set -e\n\
-cd /usr/src/app\n\
-\n\
-# Wait for database to be ready\n\
-until node -e "require(\"pg\").Pool({connectionString: process.env.DATABASE_URL}).query(\"SELECT 1\").then(() => process.exit(0)).catch(() => process.exit(1))" 2>/dev/null; do\n\
-  echo "Waiting for database..."\n\
-  sleep 2\n\
-done\n\
-\n\
-# Register custom pieces using the API or direct database insert\n\
-# This is a placeholder - you may need to create a proper script\n\
-echo "Custom pieces should be registered via API endpoint /api/v1/pieces endpoint"\n\
-' > /usr/src/app/register-custom-pieces.sh && \
-    chmod +x /usr/src/app/register-custom-pieces.sh
 
 # Copy frontend files to Nginx document root
 COPY --from=build /usr/src/app/dist/packages/react-ui /usr/share/nginx/html/
