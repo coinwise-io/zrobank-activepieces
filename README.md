@@ -1,3 +1,20 @@
+##Zro
+
+se na versao update-from-upstream der erro:
+
+git add bun.lock
+git commit -m "chore: update lockfile"
+
+gerar a imagem:
+
+docker build -t zro-ap-monorepo:2.0 .
+
+rodar a imagem: 
+
+docker run --rm -it   --env-file ./packages/server/api/.env   -e AP_LOG_PRETTY=false   --name zro-ap   zro-ap-monorepo:2.0
+
+##Zro
+
 
 <h1 align="center">
   <a

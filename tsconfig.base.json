@@ -1820,7 +1820,14 @@
       ],
       "@activepieces/piece-coralogix": [
         "packages/pieces/community/coralogix/src/index.ts"
-      ]
+      ],
+      /* ZROBANK PIECES */
+      "@zroswiss/piece-zroswiss": [ "packages/pieces/custom/zroswiss/src/index.ts"],
+      "@zroswiss/piece-zroarb": ["packages/pieces/custom/zroarb/src/index.ts"],
+      "@zroswiss/piece-bitgo": ["packages/pieces/custom/bitgo/src/index.ts"],
+      "@zroswiss/piece-mural-pay": ["packages/pieces/custom/mural-pay/src/index.ts"],
+      "@zroswiss/piece-circle-pay": [ "packages/pieces/custom/circle-pay/src/index.ts"],
+      "@zroswiss/piece-b2c2": ["packages/pieces/custom/b2c2/src/index.ts"]      
     },
     "resolveJsonModule": true
   },
