@@ -129,7 +129,7 @@
     }
   },
   "useDaemonProcess": false,
-  "parallel": 3,
+  "parallel": 1,
   "cacheDirectory": ".nx/cache",
   "nxCloudId": "642638e2fe2ac16f0fb09003"
 }

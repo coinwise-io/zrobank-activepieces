@@ -278,7 +278,7 @@ export function toPieceMetadataModelSummary<T extends PieceMetadataSchema | Piec
     })
 }
 
-const loadDevPiecesIfEnabled = async (log: FastifyBaseLogger): Promise<PieceMetadataSchema[]> => {
+const loadDevPiecesIfEnabled = async (log: FastifyBaseLogger, platformId?: string): Promise<PieceMetadataSchema[]> => {
     const devPiecesConfig = system.get(AppSystemProp.DEV_PIECES)
     if (isNil(devPiecesConfig) || isEmpty(devPiecesConfig)) {
         return []
@@ -286,12 +286,20 @@ const loadDevPiecesIfEnabled = async (log: FastifyBaseLogger): Promise<PieceMeta
     const piecesNames = devPiecesConfig.split(',')
     const pieces = await filePiecesUtils(log).loadDistPiecesMetadata(piecesNames)
 
+    // Se AP_CUSTOM_PIECES_PLATFORM_ID estiver definido e corresponder ao platformId, marca como CUSTOM
+    // Se for "ALL", marca todas as peças como CUSTOM independente do platformId
+    const customPlatformId = system.get(AppSystemProp.CUSTOM_PIECES_PLATFORM_ID)
+    const isAllPlatforms = customPlatformId === 'ALL'
+    const shouldMarkAsCustom = !isNil(customPlatformId) && !isNil(platformId) && 
+                               (isAllPlatforms || customPlatformId === platformId)
+
     return pieces.map((p): PieceMetadataSchema => ({
         id: apId(),
         ...p,
         projectUsage: 0,
-        pieceType: PieceType.OFFICIAL,
+        pieceType: shouldMarkAsCustom ? PieceType.CUSTOM : PieceType.OFFICIAL,
         packageType: PackageType.REGISTRY,
+        platformId: shouldMarkAsCustom ? platformId : undefined,
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
     }))
@@ -383,7 +391,7 @@ async function findAllPiecesVersionsSortedByNameAscVersionDesc({
     const piecesFromDatabase = await localPieceCache(log).getSortedbyNameAscThenVersionDesc()
     const piecesFromDatabaseFiltered = piecesFromDatabase.filter((piece) => (isOfficialPiece(piece) || isCustomPiece(platformId, piece)) && isSupportedRelease(release, piece))
 
-    const piecesFromDevelopment = await loadDevPiecesIfEnabled(log)
+    const piecesFromDevelopment = await loadDevPiecesIfEnabled(log, platformId)
 
     return [...piecesFromDatabaseFiltered, ...piecesFromDevelopment]
 }

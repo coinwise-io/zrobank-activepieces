@@ -82,6 +82,7 @@ const systemPropValidators: {
     [AppSystemProp.CONFIG_PATH]: stringValidator,
     [AppSystemProp.DB_TYPE]: enumValidator(Object.values(DatabaseType)),
     [AppSystemProp.DEV_PIECES]: stringValidator,
+    [AppSystemProp.CUSTOM_PIECES_PLATFORM_ID]: stringValidator,
     [AppSystemProp.ENCRYPTION_KEY]: stringValidator,
     [AppSystemProp.EXECUTION_DATA_RETENTION_DAYS]: numberValidator,
     [AppSystemProp.JWT_SECRET]: stringValidator,
