@@ -418,7 +418,10 @@
       "@zroswiss/piece-circle-pay": [
         "packages/pieces/custom/circle-pay/src/index.ts"
       ],
-      "@zroswiss/piece-b2c2": ["packages/pieces/custom/b2c2/src/index.ts"]
+      "@zroswiss/piece-b2c2": ["packages/pieces/custom/b2c2/src/index.ts"],      
+      "@activepieces/piece-chainalysis": [
+        "packages/pieces/custom/chainalysis/src/index.ts"
+      ]
     },
     "resolveJsonModule": true
   },
