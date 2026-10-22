@@ -2135,6 +2135,12 @@
         "packages/pieces/custom/one-money/src/index.ts"
       ],
       "@zroswiss/piece-persona": ["packages/pieces/custom/persona/src/index.ts"],
+      "@zroswiss/piece-crossborder": [
+        "packages/pieces/custom/crossborder/src/index.ts"
+      ],
+      "@zroswiss/crossborder-core": [
+        "packages/pieces/custom/crossborder-core/src/index.ts"
+      ],
       "@activepieces/piece-connectuc": [
         "packages/pieces/community/connectuc/src/index.ts"
       ]
